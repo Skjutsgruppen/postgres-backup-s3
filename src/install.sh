@@ -13,7 +13,7 @@ apk add gnupg
 
 apk add python3
 apk add py3-pip  # separate package on edge only
-pip3 install awscli
+pip install s3cmd
 
 # install go-cron
 apk add curl
@@ -23,7 +23,6 @@ rm go-cron_0.0.5_linux_${TARGETARCH}.tar.gz
 mv go-cron /usr/local/bin/go-cron
 chmod u+x /usr/local/bin/go-cron
 apk del curl
-
 
 # cleanup
 rm -rf /var/cache/apk/*

@@ -1,5 +1,5 @@
 # Introduction
-This project provides Docker images to periodically back up a PostgreSQL database to AWS S3, and to restore from the backup as needed.
+This project provides Docker images to periodically back up a PostgreSQL database to a custom S3 service, and to restore from the backup as needed.
 
 # Usage
 ## Backup
@@ -51,7 +51,7 @@ docker exec <container name> sh restore.sh <timestamp>
 ## Build the image locally
 `ALPINE_VERSION` determines Postgres version compatibility. See [`build-and-push-images.yml`](.github/workflows/build-and-push-images.yml) for the latest mapping.
 ```sh
-DOCKER_BUILDKIT=1 docker build --build-arg ALPINE_VERSION=3.14 .
+DOCKER_BUILDKIT=1 docker build --build-arg ALPINE_VERSION=3.16 .
 ```
 ## Run a simple test environment with Docker Compose
 ```sh
@@ -61,22 +61,5 @@ docker compose up -d
 ```
 
 # Acknowledgements
-This project is a fork and re-structuring of @schickling's [postgres-backup-s3](https://github.com/schickling/dockerfiles/tree/master/postgres-backup-s3) and [postgres-restore-s3](https://github.com/schickling/dockerfiles/tree/master/postgres-restore-s3).
-
-## Fork goals
-These changes would have been difficult or impossible merge into @schickling's repo or similarly-structured forks.
-  - dedicated repository
-  - automated builds
-  - support multiple PostgreSQL versions
-  - backup and restore with one image
-
-## Other changes and features
-  - some environment variables renamed or removed
-  - uses `pg_dump`'s `custom` format (see [docs](https://www.postgresql.org/docs/10/app-pgdump.html))
-  - drop and re-create all database objects on restore
-  - backup blobs and all schemas by default
-  - no Python 2 dependencies
-  - filter backups on S3 by database name
-  - support encrypted (password-protected) backups
-  - support for restoring from a specific backup by timestamp
-  - support for auto-removal of old backups
+This project is a fork of @eeshugerman 's fork of @schickling 's original implementation. This fork has adaptations 
+to run s3cmd instead of aws-cli to facilitate using other S3 providers than AWS.

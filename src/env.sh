@@ -29,18 +29,22 @@ if [ -z "$POSTGRES_PASSWORD" ]; then
   exit 1
 fi
 
-if [ -z "$S3_ENDPOINT" ]; then
-  aws_args=""
-else
-  aws_args="--endpoint-url $S3_ENDPOINT"
+aws_args=" "
+
+if [ -n "$S3_ENDPOINT" ]; then
+  aws_args="$aws_args --host $S3_ENDPOINT"
 fi
-
-
 if [ -n "$S3_ACCESS_KEY_ID" ]; then
-  export AWS_ACCESS_KEY_ID=$S3_ACCESS_KEY_ID
+  aws_args="$aws_args --access_key=$S3_ACCESS_KEY_ID"
 fi
 if [ -n "$S3_SECRET_ACCESS_KEY" ]; then
-  export AWS_SECRET_ACCESS_KEY=$S3_SECRET_ACCESS_KEY
+  aws_args="$aws_args --secret_key=$S3_SECRET_ACCESS_KEY"
 fi
+if [ -n "$S3_REGION" ]; then
+  aws_args="$aws_args --region=$S3_REGION"
+fi
+
+aws_args="$aws_args --host-bucket=\"%(bucket).$S3_ENDPOINT\""
+
 export AWS_DEFAULT_REGION=$S3_REGION
 export PGPASSWORD=$POSTGRES_PASSWORD
