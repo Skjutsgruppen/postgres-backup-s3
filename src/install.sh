@@ -13,7 +13,7 @@ apk add gnupg
 
 apk add python3
 apk add py3-pip  # separate package on edge only
-pip install s3cmd
+python3 -m pip install s3cmd
 
 # install go-cron
 apk add curl
